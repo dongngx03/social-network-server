@@ -8,12 +8,13 @@ class CORS {
 
         const options = {
             origin: Locals.config().url_client,
-            optionsSuccessStatus: 200
+            optionsSuccessStatus: 200,
+            credentials: true
         }
 
         _express.use(cors(options))
 
-        
+
         return _express
     }
 }

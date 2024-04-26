@@ -8,12 +8,20 @@ class Locals {
         const port = process.env.PORT || 6666;
         const url_client = process.env.URL_CLIENT;
         const isCORSEnabled = process.env.isCORSEnabled
+        const google_client_id = process.env.GOOGLE_CLIENT_ID
+        const google_client_secret = process.env.GOOGLE_CLIENT_SECRET
+        const session_secret = process.env.SESSION_SECRET
+        const callback_url = process.env.CALLBACK_URL   
 
         return {
             url,
             port,
             url_client,
-            isCORSEnabled
+            isCORSEnabled,
+            google_client_id,
+            google_client_secret,
+            session_secret,
+            callback_url
         }
     }
 }

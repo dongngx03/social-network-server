@@ -5,10 +5,10 @@ import helmet from "helmet";
 import express from "express"
 import cors from "cors"
 
+
 class Http {
     public static mount(_express: Application): Application {
         console.log('Booting the HTTP middlware ...');
-
         // Disable the x-powered-by header in response
         _express.disable('x-powered-by');
 
@@ -24,8 +24,6 @@ class Http {
         // express json
         _express.use(express.json())
 
-        //cors 
-        _express.use(cors())
 
         return _express
     }

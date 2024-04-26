@@ -2,6 +2,7 @@ import express from "express"
 import Locals from "./Locals";
 import Kernel from "../middlewares/Kernel";
 import Routes from "./Routes";
+import Passport from "./Passport";
 
 class Express {
     public express: express.Application
@@ -11,10 +12,12 @@ class Express {
      */
     constructor() {
         this.express = express();
-
+        
         this.mountMiddleware()
-        this.mountRouter()
 
+        this.mountPassport()
+
+        this.mountRouter()
     }
 
     /**
@@ -31,13 +34,19 @@ class Express {
         this.express = Routes.mountWeb(this.express)
     }
 
+    /**
+     * passport 
+     */
+    private mountPassport(): void {
+        this.express = Passport.init(this.express)
+    }
+
 
     /**
      * run server
      */
     public init(): any {
         const port: number = Locals.config().port;
-
 
         this.express.listen(port, () => {
             console.log(`server is running on port ${port}`);

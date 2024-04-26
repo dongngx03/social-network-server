@@ -7,7 +7,6 @@ class App {
         console.log("server is running...");
         Express.init();
     }
-
    
 }
 
