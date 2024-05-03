@@ -1,3 +1,4 @@
+import prismaDb from "../../configs/prismaDb";
 import IRequest from "../../interfaces/vendors/IRequest"
 import IResponse from "../../interfaces/vendors/IResponse"
 
@@ -17,15 +18,17 @@ class GoogleController {
         });
     }
 
-    public static loginSuccess(req: IRequest, res: IResponse) {
+    public static async loginSuccess(req: IRequest, res: IResponse) {
         if (req.user) {
+            const user = await prismaDb.user.findUnique({
+                where: {
+                    idAuth: req.user.id
+                }
+            })
             return res.json({
                 success: true,
                 message: "User Authenticated",
-                user: {
-                    id: req.user.id,
-                    name: req.user.displayName
-                }
+                user: user
             })
         }
         else return res.status(400).json({

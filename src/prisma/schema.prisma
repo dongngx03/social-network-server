@@ -15,21 +15,128 @@ enum Gender {
   FEMALE
 }
 
+enum Status_Friend {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum Status_Like_Post {
+  TRUE
+  FALSE
+}
+
 model User {
-  id              Int      @id @default(autoincrement())
+  id              Int              @id @default(autoincrement())
+  idAuth          String           @unique
   fistname        String
   lastname        String
-  phone           String   @unique
-  email           String   @unique
+  phone           String          
+  email           String           @unique
   birtday         DateTime
-  nickname        String   @unique
+  nickname        String           @unique
   gender          Gender
   avatar          String
   imagebackground String
+  // bảng lời mời kết bạn 
+  Friend_request1 Friend_request[] @relation("User1Request")
+  Friend_request2 Friend_request[] @relation("User2Request")
+
+  // bảng post 
+  posts Post[]
+
+  // bảng like 
+  likes Like_post[]
+
+  // bảng comment 
+  comments Comment[]
+
+  // bảng like comment 
+  likeComments Like_comment[]
+
+  // bảng message 
+  message1 Message[] @relation("senderMessage")
+  message2 Message[] @relation("receiverMessage")
 }
 
-model Friend {
-  id Int @id @default(autoincrement())
+// lời mời kết bạn 
+model Friend_request {
+  id       Int           @id @default(autoincrement())
+  sender   User?         @relation("User1Request", fields: [sourceId], references: [id])
+  sourceId Int?
+  receiver User?         @relation("User2Request", fields: [targetId], references: [id])
+  targetId Int?
+  status   Status_Friend
+}
+
+// tin 
+model Post {
+  id          Int      @id @default(autoincrement())
+  user        User?    @relation(fields: [sourceId], references: [id])
+  sourceId    Int?
+  postContent String
+  post_At     DateTime @default(now())
+
+  // bảng like 
+  likes Like_post[]
+
+  // bảng ảnh 
+  images Image_post[]
+
+  // comment 
+  comments Comment[]
+}
+
+// thích bài viết 
+model Like_post {
+  id       Int              @id @default(autoincrement())
+  post     Post?            @relation(fields: [postId], references: [id])
+  postId   Int?
+  user     User?            @relation(fields: [sourceId], references: [id])
+  sourceId Int?
+  status   Status_Like_Post
+}
+
+// ảnh của bài viết 
+model Image_post {
+  id         Int      @id @default(autoincrement())
+  imageUrl   String
+  post       Post?    @relation(fields: [postId], references: [id])
+  postId     Int?
+  created_At DateTime @default(now())
+}
+
+// bình luận bài viết 
+model Comment {
+  id              Int    @id @default(autoincrement())
+  post            Post?  @relation(fields: [postId], references: [id])
+  postId          Int?
+  user            User?  @relation(fields: [sourceId], references: [id])
+  sourceId        Int?
+  commentContent  String
+  parentCommentId Int?   @default(0)
+
+  // like comment 
+  comments Like_comment[]
+}
+
+// like bình luận 
+model Like_comment {
+  id        Int              @id @default(autoincrement())
+  comment   Comment?         @relation(fields: [commentId], references: [id])
+  commentId Int?
+  user      User?            @relation(fields: [sourceId], references: [id])
+  sourceId  Int?
+  status    Status_Like_Post
+}
+
+// tin nhắn 
+model Message {
+  id         Int   @id @default(autoincrement())
+  sender     User? @relation("senderMessage", fields: [senderId], references: [id])
+  senderId   Int?
+  receiver   User? @relation("receiverMessage", fields: [receiverId], references: [id])
+  receiverId Int?
 }
 
 generator client {

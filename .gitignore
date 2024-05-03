@@ -1,2 +1,9 @@
-package-lock.json
 node_modules/
+.vscode
+package-lock.json
+.cache/
+public/static
+*.marko.js
+.env.example
+.logs/*.log
+dist/

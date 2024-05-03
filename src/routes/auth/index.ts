@@ -20,6 +20,7 @@ routerAuth.get('/google/callback', passport.authenticate("google", {
     failureRedirect: "/v1/api/auth/login/failed"
 }))
 
+// test router
 routerAuth.get('/user', async (req, res) => {
     const user = await prismaDb.user.findMany();
     return res.status(200).json({
@@ -27,6 +28,7 @@ routerAuth.get('/user', async (req, res) => {
         user: user
     })
 })
+
 
 
 export default routerAuth
