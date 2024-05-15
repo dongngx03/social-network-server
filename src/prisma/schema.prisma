@@ -26,12 +26,21 @@ enum Status_Like_Post {
   FALSE
 }
 
+// bảng chứ id websoket
+model websoket {
+  id        Int      @id @default(autoincrement())
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int?
+  soketId  String   @unique
+  create_At DateTime @default(now())
+}
+
 model User {
   id              Int              @id @default(autoincrement())
   idAuth          String           @unique
   fistname        String
   lastname        String
-  phone           String          
+  phone           String
   email           String           @unique
   birtday         DateTime
   nickname        String           @unique
@@ -57,6 +66,17 @@ model User {
   // bảng message 
   message1 Message[] @relation("senderMessage")
   message2 Message[] @relation("receiverMessage")
+
+  // bảng đang theo dõi 
+  Following_other1 Following_other[] @relation("Following_other1")
+  Following_other2 Following_other[] @relation("Following_other2")
+
+  // bảng người theo dõi mình 
+  Following_me1 Following_me[] @relation("Following_me1")
+  Following_me2 Following_me[] @relation("Following_me2")
+
+  // websoket
+  websoket websoket[]
 }
 
 // lời mời kết bạn 
@@ -67,6 +87,26 @@ model Friend_request {
   receiver User?         @relation("User2Request", fields: [targetId], references: [id])
   targetId Int?
   status   Status_Friend
+}
+
+// người theo dõi 
+model Following_other {
+  id        Int      @id @default(autoincrement())
+  sender    User?    @relation("Following_other1", fields: [sourceId], references: [id])
+  sourceId  Int?
+  reciever  User?    @relation("Following_other2", fields: [targetId], references: [id])
+  targetId  Int?
+  create_At DateTime @default(now())
+}
+
+// người theo dõi mình 
+model Following_me {
+  id        Int      @id @default(autoincrement())
+  sender    User?    @relation("Following_me1", fields: [sourceId], references: [id])
+  sourceId  Int?
+  reciever  User?    @relation("Following_me2", fields: [targetId], references: [id])
+  targetId  Int?
+  create_At DateTime @default(now())
 }
 
 // tin 
@@ -101,7 +141,7 @@ model Like_post {
 model Image_post {
   id         Int      @id @default(autoincrement())
   imageUrl   String
-  post       Post?    @relation(fields: [postId], references: [id])
+  post       Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId     Int?
   created_At DateTime @default(now())
 }
@@ -132,11 +172,14 @@ model Like_comment {
 
 // tin nhắn 
 model Message {
-  id         Int   @id @default(autoincrement())
-  sender     User? @relation("senderMessage", fields: [senderId], references: [id])
-  senderId   Int?
-  receiver   User? @relation("receiverMessage", fields: [receiverId], references: [id])
-  receiverId Int?
+  id             Int      @id @default(autoincrement())
+  sender         User?    @relation("senderMessage", fields: [senderId], references: [id])
+  senderId       Int?
+  receiver       User?    @relation("receiverMessage", fields: [receiverId], references: [id])
+  receiverId     Int?
+  messageContent String
+  sent_At        DateTime @default(now())
+  read           Boolean  @default(false)
 }
 
 generator client {
