@@ -12,6 +12,7 @@ class Locals {
         const google_client_secret = process.env.GOOGLE_CLIENT_SECRET
         const session_secret = process.env.SESSION_SECRET
         const callback_url = process.env.CALLBACK_URL   
+        const redis_url = process.env.REDIS_URL
 
         return {
             url,
@@ -21,7 +22,8 @@ class Locals {
             google_client_id,
             google_client_secret,
             session_secret,
-            callback_url
+            callback_url,
+            redis_url
         }
     }
 }

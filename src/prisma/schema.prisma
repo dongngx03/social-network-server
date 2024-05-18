@@ -26,12 +26,17 @@ enum Status_Like_Post {
   FALSE
 }
 
+enum TypeMessage {
+  TEXT
+  IMAGE
+}
+
 // bảng chứ id websoket
 model websoket {
   id        Int      @id @default(autoincrement())
   user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int?
-  soketId  String   @unique
+  soketId   String   @unique
   create_At DateTime @default(now())
 }
 
@@ -172,14 +177,15 @@ model Like_comment {
 
 // tin nhắn 
 model Message {
-  id             Int      @id @default(autoincrement())
-  sender         User?    @relation("senderMessage", fields: [senderId], references: [id])
+  id             Int         @id @default(autoincrement())
+  sender         User?       @relation("senderMessage", fields: [senderId], references: [id])
   senderId       Int?
-  receiver       User?    @relation("receiverMessage", fields: [receiverId], references: [id])
+  receiver       User?       @relation("receiverMessage", fields: [receiverId], references: [id])
   receiverId     Int?
   messageContent String
-  sent_At        DateTime @default(now())
-  read           Boolean  @default(false)
+  sent_At        DateTime    @default(now())
+  read           Boolean     @default(false)
+  type           TypeMessage
 }
 
 generator client {

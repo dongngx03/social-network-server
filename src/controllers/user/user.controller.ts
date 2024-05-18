@@ -2,6 +2,7 @@ import Joi from "joi";
 import prismaDb from "../../configs/prismaDb";
 import IRequest from "../../interfaces/vendors/IRequest";
 import IResponse from "../../interfaces/vendors/IResponse";
+import RedisService from "../../services/redis.service";
 
 const updateUserValid = Joi.object({
     idAuth: Joi.string().required(),
@@ -126,8 +127,17 @@ class UserController {
         }
     }
     // user detail 
-    public static async UserDetail(req: IRequest, res: IResponse) {
+    public static async userDetail(req: IRequest, res: IResponse) {
         try {
+            // check redis exist data 
+            // const checkRedis = await RedisService.getPromise(`userDetail-${req.body.nickname}`)
+
+            // if (checkRedis) {
+            //     return res.status(200).json(JSON.parse(checkRedis))
+            // }
+
+            // console.log('data does not exist on redis!!');
+
             // get user detail 
             const user = await prismaDb.user.findUnique({
                 where: {
@@ -137,11 +147,11 @@ class UserController {
 
             // lấy tất cả bài viết của người ấy 
             const allPost = await prismaDb.post.findMany({
-                where : {
-                    sourceId : user?.id
+                where: {
+                    sourceId: user?.id
                 },
-                include : {
-                    images : true
+                include: {
+                    images: true
                 }
             })
 
@@ -153,13 +163,24 @@ class UserController {
             })
 
             if (user) {
-                return res.status(200).json({
-                    success: true,
-                    message: "get user successfully ",
-                    data: user,
-                    coutPost: countPost,
-                    allPost: allPost
-                })
+
+                // const setRedis = await RedisService.setPromise(`userDetail-${req.body.nickname}`, JSON.stringify({
+                //     success: true,
+                //     message: "get user successfully --> from redis ",
+                //     data: user,
+                //     coutPost: countPost,
+                //     allPost: allPost
+                // }))
+
+                // if (setRedis) {
+                    return res.status(200).json({
+                        success: true,
+                        message: "get user successfully --> from database ",
+                        data: user,
+                        coutPost: countPost,
+                        allPost: allPost
+                    })
+                // }
             }
 
             return res.status(404).json({
