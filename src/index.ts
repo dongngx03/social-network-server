@@ -1,12 +1,8 @@
 
 import App from './providers/App';
+import './providers/Redis';
 
 
-
-
-    /**
-     * run server
-     */
     App.loadServer();
 
 
