@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --exec ts-node ./src/index.ts"
+    "start": "nodemon ./dist/index.js",
+    "dev": "tsc --watch"
   },
   "keywords": [],
   "author": "",
@@ -30,9 +31,7 @@
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "prisma": "^5.13.0",
-    "socket.io": "^4.7.5",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.4.5"
+    "socket.io": "^4.7.5"
   },
   "devDependencies": {
     "@types/compression": "^1.7.5",
@@ -43,6 +42,8 @@
     "@types/morgan": "^1.9.9",
     "@types/node": "^20.12.12",
     "@types/passport": "^1.0.16",
-    "@types/passport-google-oauth20": "^2.0.14"
+    "@types/passport-google-oauth20": "^2.0.14",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
   }
 }
