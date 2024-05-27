@@ -1,5 +1,5 @@
 
-class FollowingOtherService {
+class FollowingMeService {
     static async create() {
 
     }
@@ -11,7 +11,7 @@ class FollowingOtherService {
     static async getAllPeopleFollowing() {
 
     }
-    
+
 }
 
-export default FollowingOtherService
+export default FollowingMeService

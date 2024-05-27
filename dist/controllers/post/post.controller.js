@@ -12,10 +12,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const joi_1 = __importDefault(require("joi"));
 const util_1 = require("../../util");
 const prismaDb_1 = __importDefault(require("../../configs/prismaDb"));
-const postValid = joi_1.default.object({});
 class PostController {
     //create post
     static create(req, res) {

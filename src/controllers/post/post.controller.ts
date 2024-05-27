@@ -4,9 +4,6 @@ import IResponse from "../../interfaces/vendors/IResponse";
 import { returnMessage } from "../../util";
 import prismaDb from "../../configs/prismaDb";
 
-const postValid = Joi.object({
-
-})
 
 class PostController {
     //create post
