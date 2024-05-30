@@ -5,8 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  provider = "postgresql"
+  url      = env("POSTGRES_PRISMA_URL") // uses connection pooling
   // directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
@@ -73,15 +73,10 @@ model User {
   message2 Message[] @relation("receiverMessage")
 
   // bảng đang theo dõi 
-  Following_other1 Following_other[] @relation("Following_other1")
-  Following_other2 Following_other[] @relation("Following_other2")
-
-  // bảng người theo dõi mình 
-  Following_me1 Following_me[] @relation("Following_me1")
-  Following_me2 Following_me[] @relation("Following_me2")
-
+  following_1 Following[] @relation("Following1")
+  following_2 Following[] @relation("Following2")
   // websoket
-  websoket websoket[]
+  websoket    websoket[]
 }
 
 // lời mời kết bạn 
@@ -95,21 +90,11 @@ model Friend_request {
 }
 
 // người theo dõi 
-model Following_other {
+model Following {
   id        Int      @id @default(autoincrement())
-  sender    User?    @relation("Following_other1", fields: [sourceId], references: [id])
+  sender    User?    @relation("Following1", fields: [sourceId], references: [id], onDelete: Cascade)
   sourceId  Int?
-  reciever  User?    @relation("Following_other2", fields: [targetId], references: [id])
-  targetId  Int?
-  create_At DateTime @default(now())
-}
-
-// người theo dõi mình 
-model Following_me {
-  id        Int      @id @default(autoincrement())
-  sender    User?    @relation("Following_me1", fields: [sourceId], references: [id])
-  sourceId  Int?
-  reciever  User?    @relation("Following_me2", fields: [targetId], references: [id])
+  reciever  User?    @relation("Following2", fields: [targetId], references: [id], onDelete: Cascade)
   targetId  Int?
   create_At DateTime @default(now())
 }

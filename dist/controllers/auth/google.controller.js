@@ -32,6 +32,48 @@ class GoogleController {
                 const user = yield prismaDb_1.default.user.findUnique({
                     where: {
                         idAuth: req.user.id
+                    },
+                    include: {
+                        _count: {
+                            select: {
+                                following_1: true,
+                                following_2: true
+                            }
+                        },
+                        following_1: {
+                            select: {
+                                reciever: {
+                                    select: {
+                                        id: true,
+                                        nickname: true,
+                                        avatar: true,
+                                        _count: {
+                                            select: {
+                                                following_1: true,
+                                                following_2: true
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        following_2: {
+                            select: {
+                                sender: {
+                                    select: {
+                                        id: true,
+                                        nickname: true,
+                                        avatar: true,
+                                        _count: {
+                                            select: {
+                                                following_1: true,
+                                                following_2: true
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 });
                 return res.json({

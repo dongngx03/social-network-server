@@ -8,10 +8,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const prismaDb_1 = __importDefault(require("../configs/prismaDb"));
+// lưu trữ những người mình đang theo dõi 
 class FollowingOtherService {
-    static create() {
+    static create(source_id, target_id) {
         return __awaiter(this, void 0, void 0, function* () {
+            // theo dõi người khác 
+            yield prismaDb_1.default.following_other.create({
+                data: {
+                    sourceId: +source_id,
+                    targetId: +target_id
+                }
+            });
         });
     }
     static delete() {

@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// nơi lưu trữ những người mình đang theo dõi mình 
 class FollowingMeService {
     static create() {
         return __awaiter(this, void 0, void 0, function* () {

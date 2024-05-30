@@ -146,6 +146,54 @@ class UserController {
                 const user = yield prismaDb_1.default.user.findUnique({
                     where: {
                         nickname: req.body.nickname
+                    },
+                    include: {
+                        // đếm người theo dõi , người đang theo dõi 
+                        _count: {
+                            select: {
+                                following_1: true, // người mình đang theo dõi
+                                following_2: true, // người theo dõi mình 
+                                posts: true // post
+                            },
+                        },
+                        // những người đang theo dõi
+                        following_1: {
+                            select: {
+                                targetId: true,
+                                reciever: {
+                                    select: {
+                                        id: true,
+                                        nickname: true,
+                                        avatar: true,
+                                        _count: {
+                                            select: {
+                                                following_1: true,
+                                                following_2: true
+                                            }
+                                        },
+                                    }
+                                }
+                            }
+                        },
+                        // những người theo dõi
+                        following_2: {
+                            select: {
+                                sourceId: true,
+                                sender: {
+                                    select: {
+                                        id: true,
+                                        nickname: true,
+                                        avatar: true,
+                                        _count: {
+                                            select: {
+                                                following_1: true,
+                                                following_2: true
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 });
                 // lấy tất cả bài viết của người ấy 
@@ -163,6 +211,13 @@ class UserController {
                         sourceId: user === null || user === void 0 ? void 0 : user.id
                     }
                 });
+                // check xem người tìm có theo dõi người này không 
+                const checkFollow = yield prismaDb_1.default.following.findMany({
+                    where: {
+                        sourceId: +req.body.source_id,
+                        targetId: +user.id
+                    }
+                });
                 if (user) {
                     // const setRedis = await RedisService.setPromise(`userDetail-${req.body.nickname}`, JSON.stringify({
                     //     success: true,
@@ -177,7 +232,8 @@ class UserController {
                         message: "get user successfully --> from database ",
                         data: user,
                         coutPost: countPost,
-                        allPost: allPost
+                        allPost: allPost,
+                        checkFollow: checkFollow.length !== 0 ? true : false
                     });
                     // }
                 }

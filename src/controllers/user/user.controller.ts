@@ -139,9 +139,57 @@ class UserController {
             // console.log('data does not exist on redis!!');
 
             // get user detail 
-            const user = await prismaDb.user.findUnique({
+            const user: any = await prismaDb.user.findUnique({
                 where: {
                     nickname: req.body.nickname
+                },
+                include: {
+                    // đếm người theo dõi , người đang theo dõi 
+                    _count: {
+                        select: {
+                            following_1: true, // người mình đang theo dõi
+                            following_2: true, // người theo dõi mình 
+                            posts: true // post
+                        },
+                    },
+                    // những người đang theo dõi
+                    following_1: {
+                        select: {
+                            targetId: true,
+                            reciever: {
+                                select: {
+                                    id: true,
+                                    nickname: true,
+                                    avatar: true,
+                                    _count: {
+                                        select: {
+                                            following_1: true,
+                                            following_2: true
+                                        }
+                                    },
+                                }
+                            }
+                        }
+                    },
+                    // những người theo dõi
+                    following_2: {
+                        select: {
+                            sourceId: true,
+                            sender: {
+                                select: {
+                                    id: true,
+                                    nickname: true,
+                                    avatar: true,
+                                    _count: {
+                                        select: {
+                                            following_1: true,
+                                            following_2: true
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             })
 
@@ -162,6 +210,15 @@ class UserController {
                 }
             })
 
+            // check xem người tìm có theo dõi người này không 
+            const checkFollow = await prismaDb.following.findMany({
+                where: {
+                    sourceId: +req.body.source_id,
+                    targetId: +user.id
+                }
+            })
+
+
             if (user) {
 
                 // const setRedis = await RedisService.setPromise(`userDetail-${req.body.nickname}`, JSON.stringify({
@@ -173,13 +230,14 @@ class UserController {
                 // }))
 
                 // if (setRedis) {
-                    return res.status(200).json({
-                        success: true,
-                        message: "get user successfully --> from database ",
-                        data: user,
-                        coutPost: countPost,
-                        allPost: allPost
-                    })
+                return res.status(200).json({
+                    success: true,
+                    message: "get user successfully --> from database ",
+                    data: user,
+                    coutPost: countPost,
+                    allPost: allPost,
+                    checkFollow: checkFollow.length !== 0 ? true : false
+                })
                 // }
             }
 
