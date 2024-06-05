@@ -72,10 +72,11 @@ class Express {
         // websoket
         this.io.on("connection", (socket: any) => {
             // thêm địa chỉ người dùng vào db
-            console.log('Có thằng nào đấy đang vào trang web bằng thiết bị id: ', socket.id);
+            console.log('Có người nào đấy đang vào trang web bằng thiết bị id: ', socket.id);
 
             let CheckSoketId: string | null = null
 
+            // người dùng login bằng google
             socket.on('userinfor', async (data: any) => {
                 console.log(data);
 
@@ -97,6 +98,26 @@ class Express {
 
             })
 
+            // người dùng follow người khác sẽ gửi thông báo đến người đấy
+            socket.on('following', async (data: any) => {
+                // comming soon
+            })
+
+            // người dùng nhắn gửi tin nhắn 
+            socket.on('send-message', async (data: any) => {
+                // comming soon
+            })
+
+            // người dùng thích bài viết của người khác 
+            socket.on('like-post', async (data: any) => {
+                // coming soon
+            })
+
+            // người dùng bình luận bài viết người khác 
+            socket.on('comment-post', async (data: any) => {
+
+            })
+            // người dùng đăng xuất
             socket.on('log-out', async () => {
                 CheckSoketId = null
                 // check
@@ -115,6 +136,7 @@ class Express {
                 }
                 console.log(`Người dùng thiết bị ${socket.id} đăng xuất `);
             })
+            // người dùng ngắt kết nối 
             socket.on('disconnect', async () => {
                 CheckSoketId = null
                 // check

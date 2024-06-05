@@ -10,7 +10,6 @@ class MessageService {
 
         return checkMess
     }
-
     static async sendMessage({
         senderId,
         receiverId,
@@ -33,7 +32,6 @@ class MessageService {
 
         return sendMess
     }
-
     // delete message 
     static async deleteMessage(id: number) {
         // check 
@@ -48,7 +46,6 @@ class MessageService {
 
         return deleteMess
     }
-
     // get all message from box chat 
     static async getAllMessageBoxChat(sender_id: number, receiver_id: number) {
         const mess = await prismaDb.message.findMany({
@@ -67,9 +64,6 @@ class MessageService {
 
         return mess
     }
-
-
-
 
 }
 

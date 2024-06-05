@@ -67,8 +67,22 @@ class FollowingService {
                 where: {
                     sourceId: +source_id
                 },
-                include: {
-                    reciever: true
+                select: {
+                    reciever: {
+                        select: {
+                            id: true,
+                            nickname: true,
+                            lastname: true,
+                            fistname: true,
+                            avatar: true,
+                            _count: {
+                                select: {
+                                    following_1: true,
+                                    following_2: true
+                                }
+                            }
+                        }
+                    }
                 }
             });
             return data;
@@ -81,8 +95,22 @@ class FollowingService {
                 where: {
                     targetId: +target_id
                 },
-                include: {
-                    sender: true
+                select: {
+                    sender: {
+                        select: {
+                            id: true,
+                            nickname: true,
+                            lastname: true,
+                            fistname: true,
+                            avatar: true,
+                            _count: {
+                                select: {
+                                    following_1: true,
+                                    following_2: true
+                                }
+                            }
+                        }
+                    }
                 }
             });
             return data;

@@ -7,7 +7,7 @@ import prismaDb from "../../configs/prismaDb";
 
 class PostController {
     //create post
-    public static async create(req: IRequest, res: IResponse) {
+    public static async create(req: IRequest | any, res: IResponse): Promise<any> {
         try {
             // bài viết không có ảnh 
             if (req.body.imageUrl.length === 0) {
@@ -58,7 +58,7 @@ class PostController {
         }
     }
     // get post detail 
-    public static async getDetail(req: IRequest, res: IResponse) {
+    public static async getDetail(req: IRequest | any, res: IResponse): Promise<any> {
         try {
             // lấy chi tiết 
             const post = await prismaDb.post.findUnique({
@@ -83,7 +83,7 @@ class PostController {
         }
     }
     // delte post by id (test)
-    public static async deletePost(req: IRequest, res: IResponse) {
+    public static async deletePost(req: IRequest | any, res: IResponse): Promise<any> {
         try {
             // xóa post
             await prismaDb.post.delete({
@@ -108,7 +108,7 @@ class PostController {
     }
 
     // get all post from one user 
-    public static async getAllPostOneUser(req: IRequest, res: IResponse) {
+    public static async getAllPostOneUser(req: IRequest | any, res: IResponse): Promise<any> {
         try {
             const allPost = await prismaDb.post.findMany({
                 where: {

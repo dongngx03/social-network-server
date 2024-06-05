@@ -3,7 +3,7 @@ import IRequest from "../interfaces/vendors/IRequest";
 import IResponse from "../interfaces/vendors/IResponse";
 
 class CheckMember {
-    public static async isUser(req: IRequest, res: IResponse, next: NextFunction) {
+    public static async isUser(req: IRequest | any, res: IResponse, next: NextFunction) {
         try {
             if (!req.user) {
                 return res.status(401).json({

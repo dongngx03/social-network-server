@@ -2,7 +2,6 @@ import Joi from "joi";
 import prismaDb from "../../configs/prismaDb";
 import IRequest from "../../interfaces/vendors/IRequest";
 import IResponse from "../../interfaces/vendors/IResponse";
-import RedisService from "../../services/redis.service";
 
 const updateUserValid = Joi.object({
     idAuth: Joi.string().required(),
@@ -19,7 +18,7 @@ const updateUserValid = Joi.object({
 
 class UserController {
     // get user infor 
-    public static async getInfor(req: IRequest, res: IResponse): Promise<IResponse> {
+    public static async getInfor(req: IRequest | any, res: IResponse): Promise<IResponse> {
         try {
             const userInfor = await prismaDb.user.findUnique({
                 where: {
@@ -39,7 +38,7 @@ class UserController {
         }
     }
     // update user infor 
-    public static async updateInfor(req: IRequest, res: IResponse) {
+    public static async updateInfor(req: IRequest | any, res: IResponse): Promise<any> {
         try {
             //valid
             const { error } = updateUserValid.validate(req.body, { abortEarly: false })
@@ -102,7 +101,7 @@ class UserController {
         }
     }
     // search user 
-    public static async searchUser(req: IRequest, res: IResponse) {
+    public static async searchUser(req: IRequest | any, res: IResponse): Promise<any> {
         try {
             const user = await prismaDb.user.findMany({
                 where: {
@@ -127,7 +126,7 @@ class UserController {
         }
     }
     // user detail 
-    public static async userDetail(req: IRequest, res: IResponse) {
+    public static async userDetail(req: IRequest | any, res: IResponse): Promise<any> {
         try {
             // check redis exist data 
             // const checkRedis = await RedisService.getPromise(`userDetail-${req.body.nickname}`)
@@ -253,7 +252,7 @@ class UserController {
         }
     }
     // update avatar 
-    public static async updateAvatar(req: IRequest, res: IResponse) {
+    public static async updateAvatar(req: IRequest | any, res: IResponse): Promise<any> {
         try {
             const newAvatar = await prismaDb.user.update({
                 where: {

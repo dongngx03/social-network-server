@@ -6,7 +6,7 @@
 
 datasource db {
   provider = "postgresql"
-  url      = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  url      = env("POSTGRES_PRISMA_URL") // uses connection poolin
   // directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
@@ -77,6 +77,9 @@ model User {
   following_2 Following[] @relation("Following2")
   // websoket
   websoket    websoket[]
+
+  // thông báo 
+  notifycation Notifycation[]
 }
 
 // lời mời kết bạn 
@@ -173,6 +176,15 @@ model Message {
   type           TypeMessage
 }
 
+// thông báo 
+model Notifycation {
+  id       Int    @id @default(autoincrement())
+  targetId User?  @relation(fields: [user_id], references: [id])
+  user_id  Int?
+  content  String
+}
+
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
 }

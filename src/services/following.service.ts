@@ -16,8 +16,6 @@ class FollowingService {
 
         return checkFollow
     }
-
-
     static async create(source_id: number, target_id: number) {
         const checkFollow = await this.checkF(source_id, target_id)
         if (checkFollow) return false
@@ -32,7 +30,6 @@ class FollowingService {
         return following
 
     }
-
     static async unFollow(source_id: number, target_id: number) {
         const checkFollow = await this.checkF(source_id, target_id)
         if (!checkFollow) return false
@@ -47,29 +44,55 @@ class FollowingService {
         })
         return unF
     }
-
     // lấy tất cả người dùng đang follow 
     static async getAllPeopleFollowing(source_id: number | any) {
         const data = await prismaDb.following.findMany({
             where: {
                 sourceId: +source_id
             },
-            include: {
-                reciever: true
+            select: {
+                reciever: {
+                    select: {
+                        id: true,
+                        nickname: true,
+                        lastname: true,
+                        fistname: true,
+                        avatar: true,
+                        _count: {
+                            select: {
+                                following_1: true,
+                                following_2: true
+                            }
+                        }
+                    }
+                }
             }
         })
 
         return data
     }
-
     // lấy tất cả người dùng đang theo dõi mình 
     static async getAllPeopleFollowingMe(target_id: number | any) {
         const data = await prismaDb.following.findMany({
             where: {
                 targetId: +target_id
             },
-            include: {
-                sender: true
+            select: {
+                sender: {
+                    select: {
+                        id: true,
+                        nickname: true,
+                        lastname: true,
+                        fistname: true,
+                        avatar: true,
+                        _count: {
+                            select: {
+                                following_1: true,
+                                following_2: true
+                            }
+                        }
+                    }
+                }
             }
         })
 
